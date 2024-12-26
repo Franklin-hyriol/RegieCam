@@ -13,6 +13,10 @@ const app = (0, express_1.default)();
 app.use(body_parser_1.default.json());
 // Configuration CORS pour toutes les requêtes
 app.use((0, cors_1.default)());
+// Route de test
+app.get('/', (req, res) => {
+    res.send('Serveur de la régie CAM');
+});
 // Utilisation des routes définies dans userRoutes
 app.use('/api/v1/', camRoute_1.default);
 app.use('/api/v1/', adminRoute_1.default);
