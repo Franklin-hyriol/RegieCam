@@ -188,7 +188,7 @@ const updateCam = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         return;
     }
     const camId = req.params.id; // Récupère l'ID de l'utilisateur à mettre à jour
-    const { name, status } = req.body; // Récupère les mots de passe du corps de la requête
+    const { name, status } = req.body;
     try {
         const cam = yield Cam_1.default.findByPk(camId); // Trouve l'utilisateur par ID
         if (!cam) {

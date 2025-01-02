@@ -20,7 +20,10 @@ export const CameramanList: React.FC<CameramanListProps> = ({ camera, onSignalCh
             />
             <span className="font-medium">{cam.name}</span>
           </div>
-          <div className="flex space-x-2">
+          <div className="flex items-center space-x-2">
+
+            <div>{cam.used ? "true" : "false"}</div>
+
             <SignalButton
               color="red"
               onClick={() => onSignalChange(cam.id, 'red')}

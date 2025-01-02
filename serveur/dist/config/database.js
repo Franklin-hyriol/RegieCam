@@ -9,6 +9,7 @@ dotenv_1.default.config();
 // Création de l'instance Sequelize
 const sequelize = new sequelize_1.Sequelize("regiecam", "root", "fraklin15", {
     host: "localhost",
-    dialect: 'mysql'
+    dialect: 'mysql',
+    logging: false
 });
 exports.default = sequelize;
