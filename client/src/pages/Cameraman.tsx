@@ -37,7 +37,6 @@ export const Cameraman: React.FC = () => {
     axios.get(getallcam)
       .then(response => {
         setCameramen(response.data);
-        console.log('Réponse :', response.data);
       })
       .catch(error => {
         console.error('Erreur :', error);

@@ -20,7 +20,6 @@ export const Home = () => {
 
     axios.get(updateAdmin)
       .then(response => {
-        console.log('Réponse :', response.data);
         if (response.data.free) {
           setShowMessage(true);
         } else {

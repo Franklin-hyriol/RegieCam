@@ -31,8 +31,6 @@ export default (io: Server) => {
 
 
     io.on('connection', (socket) => {
-        console.log('Nouvelle connexion:', socket.id);
-
         socket.on('signal', (data) => {
             socket.broadcast.emit('signal', data);
         });
