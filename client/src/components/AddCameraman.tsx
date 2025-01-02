@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { createcam } from '../api/url';
+import { Socket } from 'socket.io-client';
 // import { UserPlus } from 'lucide-react';
 
 interface AddCameramanProps {
   updateCamList: () => void;
+  socket: Socket;
 }
 
-export const AddCameraman: React.FC<AddCameramanProps> = ({ updateCamList }) => {
+export const AddCameraman: React.FC<AddCameramanProps> = ({ updateCamList, socket }) => {
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
 
@@ -19,10 +21,10 @@ export const AddCameraman: React.FC<AddCameramanProps> = ({ updateCamList }) => 
         name: name
       })
         .then(response => {
-          console.log('Réponse :', response.data);
           if (response.status == 201) {
             setMessage("Cameraman ajouter avec success");
             updateCamList()
+            socket.emit('signal', { message: 'change' });
           }
         })
         .catch(error => {

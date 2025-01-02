@@ -4,8 +4,13 @@ import { CameramanList } from '../components/CameramanList';
 import { Link, useNavigate } from 'react-router-dom';
 import { Camera, Signal } from '../types';
 import axios from 'axios';
-import { deleteCam, disconnectAdmin, getallcam, updateCam } from '../api/url';
+import { backendUrl, deleteCam, disconnectAdmin, getallcam, updateCam } from '../api/url';
 // import { Home as HomeIcon } from 'lucide-react';
+import io from 'socket.io-client';
+
+const socket = io(backendUrl, {
+  transports: ["websocket"]
+});
 
 export const Pilot: React.FC = () => {
   const [cameramen, setCameramen] = useState<Camera[] | null>(null);
@@ -15,7 +20,6 @@ export const Pilot: React.FC = () => {
     axios.get(getallcam)
       .then(response => {
         setCameramen(response.data);
-        console.log('Réponse :', response.data);
       })
       .catch(error => {
         console.error('Erreur :', error);
@@ -32,8 +36,10 @@ export const Pilot: React.FC = () => {
     })
       .then(response => {
         if (response.status === 200) {
-          console.log('update signal success');
           fetchCameramen(); // Re-fetch les données après la mise à jour
+
+          socket.emit('signal', { message: 'change' });
+
         }
       })
       .catch(error => {
@@ -58,8 +64,8 @@ export const Pilot: React.FC = () => {
     axios.delete(`${deleteCam}/${id}`)
       .then(response => {
         if (response.status === 200) {
-          console.log('delete cam success');
           fetchCameramen(); // Re-fetch les données après la mise à jour
+          socket.emit('signal', { message: 'change' });
         }
         if (response.status === 204) {
           alert('Cam is used');
@@ -82,7 +88,7 @@ export const Pilot: React.FC = () => {
             <span>Home</span>
           </Link>
         </div>
-        <AddCameraman updateCamList={fetchCameramen} />
+        <AddCameraman updateCamList={fetchCameramen} socket={socket} />
         <Suspense>
           {cameramen && <CameramanList camera={cameramen} onSignalChange={handleSignal} deleteCamById={deleteCamById} />}
         </Suspense>

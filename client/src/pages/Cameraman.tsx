@@ -1,10 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Camera } from '../types';
 import axios from 'axios';
-import { getallcam, updatecamUsed } from '../api/url';
+import { backendUrl, getallcam, updatecamUsed } from '../api/url';
 import { getSignalColor } from '../helpers/getSignalColor';
+import { io } from 'socket.io-client';
 // import { Home as HomeIcon } from 'lucide-react';
+
+
+const socket = io(backendUrl, {
+  transports: ['websocket'],
+});
 
 export const Cameraman: React.FC = () => {
 
@@ -27,7 +33,7 @@ export const Cameraman: React.FC = () => {
   }
 
 
-  const fetchCameramen = () => {
+  const fetchCameramen = useCallback(async () => {
     axios.get(getallcam)
       .then(response => {
         setCameramen(response.data);
@@ -36,11 +42,25 @@ export const Cameraman: React.FC = () => {
       .catch(error => {
         console.error('Erreur :', error);
       });
-  };
+  }, []);
 
   useEffect(() => {
     fetchCameramen();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+
+  useEffect(() => {
+    const handleSignal = () => {
+      fetchCameramen();
+    };
+
+    socket.on('signal', handleSignal);
+    return () => {
+      socket.off('signal', handleSignal);
+    };
+  }, [fetchCameramen]);
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">

@@ -1,4 +1,5 @@
 const baseUrl = "http://localhost:5000/api/v1/"
+export const backendUrl = "http://localhost:5000";
 
 // admin
 export const updateAdmin = baseUrl + "updateadmi";

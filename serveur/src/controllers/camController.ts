@@ -192,7 +192,7 @@ export const updateCam = async (req: Request, res: Response): Promise<void> => {
     }
 
     const camId = req.params.id; // Récupère l'ID de l'utilisateur à mettre à jour
-    const { name, status } = req.body; // Récupère les mots de passe du corps de la requête
+    const { name, status } = req.body;
 
 
     try {

@@ -10,7 +10,8 @@ const sequelize = new Sequelize(
     "fraklin15",
     {
         host: "localhost",
-        dialect: 'mysql'
+        dialect: 'mysql',
+        logging: false
     }
 );
 

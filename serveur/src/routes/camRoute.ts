@@ -1,29 +1,43 @@
 import express from 'express';
+import { Server } from 'socket.io';
 import { checkSchema } from 'express-validator';
 import { createCamValidationSchema } from '../middlewares/createCamValidationSchema';
 import { createCam, getAllCam, getCamById, deleteCamById, updateCam, updateCamUsed } from '../controllers/camController';
 import { updateCamValidationSchema } from '../middlewares/updateCamValidationSchema';
 
 // Crée une instance du routeur Express
-const router = express.Router();
 
-// Route pour créer un camera
-router.post('/createcam', checkSchema(createCamValidationSchema), createCam);
+export default (io: Server) => {
 
-// Route pour obtenir tous les camera
-router.get("/getallcam", getAllCam);
+    const router = express.Router();
 
+    // Route pour créer un camera
+    router.post('/createcam', checkSchema(createCamValidationSchema), createCam);
 
-// get cam by id
-router.get("/getcam/:id", getCamById);
-
-//delete cam by id
-router.delete("/deletecam/:id", deleteCamById);
-
-router.patch("/updatecamUsed/:id", updateCamUsed);
-
-// update cam
-router.patch("/updatecamName/:id", checkSchema(updateCamValidationSchema), updateCam);
+    // Route pour obtenir tous les camera
+    router.get("/getallcam", getAllCam);
 
 
-export default router;
+    // get cam by id
+    router.get("/getcam/:id", getCamById);
+
+    //delete cam by id
+    router.delete("/deletecam/:id", deleteCamById);
+
+    router.patch("/updatecamUsed/:id", updateCamUsed);
+
+    // update cam
+    router.patch("/updatecamName/:id", checkSchema(updateCamValidationSchema), updateCam);
+
+
+    io.on('connection', (socket) => {
+        console.log('Nouvelle connexion:', socket.id);
+
+        socket.on('signal', (data) => {
+            socket.broadcast.emit('signal', data);
+        });
+    });
+
+
+    return router;
+};

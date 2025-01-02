@@ -7,7 +7,7 @@ const sequelize_1 = require("sequelize");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 // Création de l'instance Sequelize
-const sequelize = new sequelize_1.Sequelize("zdfdgbej_regiecam", "zdfdgbej_regiecam", "wP6dMhE{,0", {
+const sequelize = new sequelize_1.Sequelize("regiecam", "root", "fraklin15", {
     host: "localhost",
     dialect: 'mysql'
 });
